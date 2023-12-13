@@ -8,6 +8,7 @@ use Exception;
 use Illuminate\Http\Request;
 use PhpParser\Node\Stmt\TryCatch;
 use Illuminate\Support\Facades\DB;
+use App\Models\Marca;
 
 class marcaController extends Controller
 {
@@ -16,7 +17,8 @@ class marcaController extends Controller
      */
     public function index()
     {
-        return view('marca.index');
+        $marcas = Marca::with('caracteristica')->latest()->get();
+        return view('marca.index', ['marcas' => $marcas]);
     }
 
     /**
@@ -24,6 +26,7 @@ class marcaController extends Controller
      */
     public function create()
     {
+        $marcas = Marca::with('caracteristica')->latest()->get();
         return view('marca.create');
     }
 
@@ -57,9 +60,9 @@ class marcaController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Marca $marca)
     {
-        //
+        return view('marca.edit',['marca'=>$marca]);
     }
 
     /**
