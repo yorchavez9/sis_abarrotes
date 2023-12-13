@@ -72,7 +72,7 @@ class categoriaController extends Controller
             Caracteristica::where('id', $categoria->caracteristica->id)->update([
                 'estado' => 1
             ]);
-            $message = 'categoria restaurada';
+            $message = 'Categoria restaurada';
         }
 
         return redirect()->route('categorias.index')->with('success', $message);

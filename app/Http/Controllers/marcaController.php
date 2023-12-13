@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreMarcaRequest;
+use App\Http\Requests\UpdataMarcaRequest;
 use App\Models\Caracteristica;
 use Exception;
 use Illuminate\Http\Request;
@@ -68,9 +69,10 @@ class marcaController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdataMarcaRequest $request, Marca $marca)
     {
-        //
+        Caracteristica::where('id',$marca->caracteristica->id)->update($request->validated());
+        return redirect()->route('marcas.index')->with('success','Marca editada');
     }
 
     /**
@@ -78,6 +80,22 @@ class marcaController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $message = '';
+        $marca = Marca::find($id);
+        if($marca->caracteristica->estado ==1){
+            Caracteristica::where('id', $marca->caracteristica->id)->update([
+                'estado' => 0
+            ]);
+
+            $message = 'Marca eliminada';
+        }else{
+            Caracteristica::where('id', $marca->caracteristica->id)->update([
+                'estado' => 1
+            ]);
+
+            $message = 'Marca restaurada';
+        }
+
+        return redirect()->route('marcas.index')->with('success', $message);
     }
 }

@@ -93,7 +93,7 @@
                                         aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    {{ $marca->caracteristica->estado == 1 ? '¿Segúro que quieres eliminar la categoría?' : '¿Segúro que quieres restaurar la categoría?'}}
+                                    {{ $marca->caracteristica->estado == 1 ? '¿Segúro que quieres eliminar la marca?' : '¿Segúro que quieres restaurar la marac?'}}
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary"
