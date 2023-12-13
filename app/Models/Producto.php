@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Producto extends Model
 {
@@ -27,5 +28,16 @@ class Producto extends Model
 
     public function presentacione(){
         return $this->belongsTo(Presentacione::class);
+    }
+
+    protected $fillable = ['codigo', 'nombre', 'descripcion', 'fecha_vencimiento', 'marca_id', 'presentacione_id','img_path'];
+
+    public function hanbleUploadImage($image){
+        $file = $image;
+        $name = time().$file->getClientOriginalName();
+        //$file->move(public_path().'/img/productos/', $name);
+        Storage::putFileAs('/public/productos',$file,$name,'public');
+
+        return $name;
     }
 }
