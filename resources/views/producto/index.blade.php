@@ -88,26 +88,37 @@
                             @if ($item->estado ==1)
                             <span class="fw-bolder rounded p-1 bg-success text-white small-text">
                                 Activo
-                              </span>
+                            </span>
                             @else
                             <span class="fw-bolder rounded p-1 bg-danger text-white small-text">
                                 Desactivado
-                              </span>
+                            </span>
                             @endif
                         </td>
                         <td>
                             <div class="btn-group" role="group" aria-label="Basic example">
                                 <div>
-                                    <button type="button" class="btn btn-warning me-1">Editar</button>
-                                    <button type="button" class="btn btn-success me-1" data-bs-toggle="modal" data-bs-target="#verModal-{{ $item->id }}">Ver</button>
-                                    <button type="button" class="btn btn-danger">Eliminar</button>
-                                  </div>
-                                  
+                                    <form action="{{ route('productos.edit',['producto'=>$item]) }}" method="get">
+                                        <button type="submit" class="btn btn-warning">Editar</button>
+                                    </form>
+                                    <button type="button" class="btn btn-success" data-bs-toggle="modal"
+                                        data-bs-target="#verModal-{{ $item->id }}">Ver</button>
+
+                                    @if ($item->estado == 1)
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                        data-bs-target="#deleteModal-{{ $item->id }}">Eliminar</button>
+                                    @else
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#deleteModal-{{ $item->id }}">Restaurar</button>
+                                    @endif
+
+
+                                </div>
                             </div>
                         </td>
                     </tr>
 
-                    {{-- MOdal ver --}}
+                    {{-- Modal ver --}}
                     <div class="modal fade" id="verModal-{{ $item->id }}" tabindex="-1"
                         aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-scrollable">
@@ -119,21 +130,27 @@
                                 </div>
                                 <div class="modal-body">
                                     <div class="row mb-3">
-                                        <label for="descripcion"><span class="fw-bolder">Descripción: </span>{{ $item->descripcion }}</label>
+                                        <label for="descripcion"><span class="fw-bolder">Descripción: </span>{{
+                                            $item->descripcion }}</label>
                                     </div>
                                     <div class="row mb-3">
-                                        <label for="Fecha_vencimiento"><span class="fw-bolder">Fecha de vencimiento: </span>{{ $item->fecha_vencimiento==''? 'No tiene' : $item->fecha_vencimiento }}</label>
+                                        <label for="Fecha_vencimiento"><span class="fw-bolder">Fecha de vencimiento:
+                                            </span>{{ $item->fecha_vencimiento==''? 'No tiene' :
+                                            $item->fecha_vencimiento }}</label>
                                     </div>
                                     <div class="row mb-3">
-                                        <label for="stock"><span class="fw-bolder">Stock: </span>{{ $item->stock }}</label>
+                                        <label for="stock"><span class="fw-bolder">Stock: </span>{{ $item->stock
+                                            }}</label>
                                     </div>
                                     <div class="row mb-3">
                                         <label for="">Imagen:</label>
                                         <div>
                                             @if ($item->img_path != null)
-                                                <img src="{{ Storage::url('public/productos/'.$item->img_path) }}" alt="{{ $item->nombre }}" class="img-fluid img-thumbnail border border-4 rounded">
+                                            <img src="{{ Storage::url('public/productos/'.$item->img_path) }}"
+                                                alt="{{ $item->nombre }}"
+                                                class="img-fluid img-thumbnail border border-4 rounded">
                                             @else
-                                                <span>No tiene imagen</span>
+                                            <span>No tiene imagen</span>
                                             @endif
                                         </div>
                                     </div>
@@ -141,6 +158,33 @@
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary"
                                         data-bs-dismiss="modal">Cerrar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Modal eliminar-->
+                    <div class="modal fade" id="deleteModal-{{ $item->id }}" tabindex="-1"
+                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Mensaje de confirmación</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    {{ $item->estado == 1 ? '¿Segúro que quieres eliminar el producto?' : '¿Segúro que
+                                    quieres restaurar el producto?'}}
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Cerrar</button>
+                                    <form action="{{ route('productos.destroy',['producto'=>$item->id]) }}"
+                                        method="post">
+                                        @method('DELETE')
+                                        @csrf
+                                        <button type="submit" class="btn btn-danger">Confirmar</button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
