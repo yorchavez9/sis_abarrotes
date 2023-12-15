@@ -5,6 +5,7 @@ use App\Http\Controllers\categoriaController;
 use App\Http\Controllers\presentacionController;
 use App\Http\Controllers\marcaController;
 use App\Http\Controllers\ProductoController;
+use App\Http\Controllers\clienteController;
 
 
 
@@ -19,7 +20,8 @@ Route::resources([
     'categorias' => categoriaController::class,
     'presentaciones' => presentacionController::class,
     'marcas' => marcaController::class,
-    'productos' => ProductoController::class
+    'productos' => ProductoController::class,
+    'clientes' => clienteController::class
 ]);
 
 
